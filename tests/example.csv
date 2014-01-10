@@ -11,7 +11,7 @@ average_score,,average score,13,resultado promedio,18,score moyen,11,Pontuação
 blog,,blog,4,blog,4,blog,4,Blog,4,Blog,234,
 cancel,,cancel,6,cancelar,8,annuler,7,Cancelar,8,abbrechen,234,
 cant_wait_show,,We can't wait to show you more ,30,No podemos esperar para mostrarte más,37,Impatients de vous en faire découvrir plus,42,Mal podemos esperar para te mostrar mais,40,Wir können es kaum erwarten Dir mehr zu zeigen,234,
-char_test,,Test these chars \ $ ,15,Test these chars \ $ ,16,Test these chars \ $ ,14,Test these chars \ $ ,17,Test these chars \ $ ,234,
+char_test,,Test these chars \" " \" $ ,15,Test these chars \ " $ ,16,Test these chars \ $ ,14,Test these chars \ $ ,17,Test these chars \ $ ,234,
 characters_not_allowed,,The following characters are not allowed in topics: ? # / \ _,61,Los siguientes carácteres no están permitidos en términos o temas: ¿ ? # / \ _,78,Les caractères suivants ne sont pas autorisés: ? # / \ _,56,Os seguintes caracteres não são permitidos nos tópicos:? # / \ _,64,Die folgenden Sonderzeichen sind nicht erlaubt: ? # / \ _,345,
 check_it_out,,Check it out.,13,Compruébalo tu mismo.,21,Découvrez.,10,Confira.,8,Schau's Dir an,456,
 choose_a_photo,,choose a photo,14,Elige una foto,15,Choisir une photo,17,Escolha uma foto,16,Photo auswählen,567,

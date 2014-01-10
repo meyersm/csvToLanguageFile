@@ -27,11 +27,6 @@ class csvToLang
     private $invalidparam_error;
     private $fileparam_error;
 
-/*
- *
- *TODO: Fix parse issues with double quotes ( " )
- */
-
 
     public function __construct($csvFile=null)
     {
@@ -106,7 +101,7 @@ class csvToLang
                             {
                                 if ($out_core_touched == false)
                                     $out_core[$column] = $file_start;
-                                $out_core[$column] .= '"'.$data[$this->key_column].'"'.$this->output_mode['glue'] .'"'.$v.'"';
+                                $out_core[$column] .= '"'.$data[$this->key_column].'"'.$this->output_mode['glue'] .'"'.$this->characterFilter($v).'"';
                                 $out_core[$column] .= $this->output_mode['endline'];
                             }
                             $column++;
@@ -226,6 +221,24 @@ class csvToLang
     {
         if (!$this->mode_silent)
             print $text;
+    }
+
+    private function characterFilter($string)
+    {
+        $pos = strpos($string,'"');
+
+        if ($pos !== false)
+        {
+
+            if (substr($string,$pos-1,1) == "\\")// is it already escaped with a \
+                return substr($string,0,$pos+1) . $this->characterFilter(substr($string,$pos+1));//skip to next segment
+            else
+            {
+                $string = preg_replace('/"/', '\\"', $string, 1);// add an escape slash
+                return substr($string,0,$pos+2) . $this->characterFilter(substr($string,$pos+2));//next segment is 2+pos because 1 char was added during replace
+            }
+        }
+        return $string;
     }
 
 
