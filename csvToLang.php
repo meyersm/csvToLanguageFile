@@ -10,8 +10,9 @@ class csvToLang
     public  $ignore_columns = array();
     public  $ignore_rows = array();
     public  $output_dir = 'output/';
-    public  $output_mode = array('start'=>"return array(\n",'glue'=>'=>','endline'=>",\n",'end'=>');','blank'=>'');
-    public  $php_tag_in_file = true;
+    public  $output_mode = array('start'=>"<?php\nreturn array(\n","startline"=>'','key_surround'=>'"','text_surround'=>'"','glue'=>'=>','endline'=>",\n",'end'=>');','blank'=>'');
+    public  $file_extension = ".php";
+    public  $endline_output_on_final_line = true;
     public  $key_column = 0;
     public  $key_row = 0;
     public  $mode_silent = false;
@@ -68,10 +69,8 @@ class csvToLang
         $file_start ='';
         $out_core = array();
         $column_keys = array();
-        $row = 0;
+        $row = $column = 0;
         $out_core_touched = false;
-        if ($this->php_tag_in_file)
-            $file_start .= "<?php \n\n";
         $file_start .= $this->output_mode['start'];
 
         $handle = fopen($this->file, "r");
@@ -99,10 +98,18 @@ class csvToLang
                         {
                             if (($k != $this->key_column) && (!in_array($column,$this->ignore_columns)))
                             {
+                                if ((!$this->endline_output_on_final_line) && ($out_core_touched))
+                                    $out_core[$column] .= $this->output_mode['endline'];//Only add endlines when we know there is another line
                                 if ($out_core_touched == false)
                                     $out_core[$column] = $file_start;
-                                $out_core[$column] .= '"'.$data[$this->key_column].'"'.$this->output_mode['glue'] .'"'.$this->characterFilter($v).'"';
-                                $out_core[$column] .= $this->output_mode['endline'];
+
+                                $out_core[$column] .= $this->output_mode['startline'] .
+                                    $this->output_mode['key_surround'] . $data[$this->key_column] . $this->output_mode['key_surround'] .   //Key
+                                    $this->output_mode['glue'] .                                                                           //Glue
+                                    $this->output_mode['text_surround'] .$this->characterFilter($v). $this->output_mode['text_surround'] ; //Text
+
+                                if ($this->endline_output_on_final_line)
+                                    $out_core[$column] .= $this->output_mode['endline'];
                             }
                             $column++;
                         }
@@ -117,12 +124,12 @@ class csvToLang
         foreach ($out_core as $k=>$v)
         {
             $out_core[$k] .= $this->output_mode['end'];
-            $file = $this->output_dir .$column_keys[$k].'.php';
+            $file = $this->output_dir .$column_keys[$k]. $this->file_extension;
             $status = file_put_contents($file,$out_core[$k]);
             $this->consoleOutput($file. ' output, status='.$status. "\n");
         }
 
-        $this->consoleOutput("Parse Complete");
+        $this->consoleOutput("Parse Complete\n");
         return ($error) ? 1 : 0;
     }
 
@@ -181,6 +188,8 @@ class csvToLang
         $this->consoleOutput("Configuring...\n");
         foreach ($json_array as $key => $value)
         {
+            if ($key == "output_mode")
+                $value = array_merge($this->output_mode,$value);
             $this->$key = $value;
             if (is_array($value))
                 $value = json_encode($value);
