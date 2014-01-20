@@ -15,7 +15,7 @@ Basic Usage
     -f: CSV file to parse
 
 For example, running the command
-    php csvToLang.php -f examples/simple.csv
+    `php csvToLang.php -f examples/simple.csv`
     
 will produce a file like this:
 en_US.php
@@ -27,7 +27,7 @@ en_US.php
     "fries"=>"fries",
     );
 ```
-Along with 2 other files: en_UK.php and es_ES.php
+Along with 2 other files: `en_UK.php` and `es_ES.php`
 
 [Source csv file for this example](examples/simple.csv)
 
